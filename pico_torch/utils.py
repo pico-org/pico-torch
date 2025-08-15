@@ -7,4 +7,6 @@ def jax_tanh(X):
     return (jnp.exp(X) - jnp.exp(-X)) / (jnp.exp(X) + jnp.exp(-X))
 
 
-
+@jit 
+def jax_ReLU(X):
+    return jnp.maximum(0,X)
