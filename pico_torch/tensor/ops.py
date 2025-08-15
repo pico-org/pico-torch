@@ -1,5 +1,5 @@
-import jax
-import jax.numpy as jnp
+import jax # type: ignore
+import jax.numpy as jnp  # type: ignore
 
 
 class Tensor:
@@ -95,3 +95,5 @@ class Tensor:
         else:
             data = self.data != other
             return Tensor(data, _parents=[self])
+
+

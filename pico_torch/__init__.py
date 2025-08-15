@@ -1,8 +1,23 @@
 from .tensor import Tensor
+import jax.numpy as jnp  # type: ignore
+from jax import jit  # type: ignore
 
-# Make Tensor available directly in the package namespace
+from .utils import jax_tanh
 __all__ = ["Tensor"]
 
-# Add Tensor to builtins so it's available everywhere
+# Warmup JIT for scalar and typical tensor shape
+jax_tanh(2)  # scalar warmup
+jax_tanh(jnp.ones((3,)))  # vector warmup 
+
 import builtins
 builtins.Tensor = Tensor
+
+
+def tanh(X):
+    if isinstance(X, Tensor):
+        array = jnp.array(X.data)
+        data = jax_tanh(array)
+        return Tensor(data, _parents=[X])
+    else:
+        raise TypeError("Expected a Tensor as input")
+
