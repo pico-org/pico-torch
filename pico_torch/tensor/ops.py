@@ -3,11 +3,12 @@ import jax.numpy as jnp  # type: ignore
 
 
 class Tensor:
-    def __init__(self, data, dtype=None, requires_grad=False, _parents=None):
+    def __init__(self, data, dtype=None, requires_grad=False, _parents=None,_ops = ""):
         self.data = jnp.array(data, dtype=dtype)
         self.requires_grad = requires_grad
+        self._ops = _ops
 
-        self._grad = None
+        self._grad = jnp.zeros(self.data.shape) if self.requires_grad is not None else None
         self._grad_fn = None
         self._parents = [] if _parents is None else _parents
 
@@ -20,7 +21,7 @@ class Tensor:
             return Tensor(data, _parents=[self])
         else:
             data = self.data + other.data
-            return Tensor(data, _parents=[self, other])
+            return Tensor(data, _parents=[self, other],_ops = "+")
 
     def __radd__(self, other):
         return self + other
@@ -28,25 +29,26 @@ class Tensor:
     def __sub__(self, other):
         if isinstance(other, (int, float)):
             data = self.data - other
-            return Tensor(data, _parents=[self])
+            return Tensor(data, _parents=[self],_ops = "sub_scalar")
         else:
             data = self.data - other.data
-            return Tensor(data, _parents=[self, other])
+            return Tensor(data, _parents=[self, other], _ops = "-")
 
     def __rsub__(self, other):
         if isinstance(other, (int, float)):
             data = other - self.data
-            return Tensor(data, _parents=[self])
+            return Tensor(data, _parents=[self], _ops = "rsub_scalar")
         else:
-            return other - self
+            data = other.data - self.data
+            return Tensor(data, _parents=[other, self], _ops = "-")
 
     def __mul__(self, other):
         if isinstance(other, (int, float)):
             data = self.data * other
-            return Tensor(data, _parents=[self])
+            return Tensor(data, _parents=[self],_ops = "*")
         else:
             data = self.data * other.data
-            return Tensor(data, _parents=[self, other])
+            return Tensor(data, _parents=[self, other],_ops = "*")
 
     def __rmul__(self, other):
         return self * other
@@ -54,29 +56,26 @@ class Tensor:
     def __truediv__(self, other):
         if isinstance(other, (int, float)):
             data = self.data / other
-            return Tensor(data, _parents=[self])
+            return Tensor(data, _parents=[self],_ops = "/")
         else:
             data = self.data / other.data
-            return Tensor(data, _parents=[self, other])
+            return Tensor(data, _parents=[self, other],_ops = "/")
 
     def __rtruediv__(self, other):
         if isinstance(other, (int, float)):
             data = other / self.data
-            return Tensor(data, _parents=[self])
+            return Tensor(data, _parents=[self],_ops = "/")
         else:
             return other / self
 
     def __neg__(self):
         data = -self.data
-        return Tensor(data, _parents=[self])
+        return Tensor(data, _parents=[self], _ops = "neg")
 
     def __pow__(self, num):
         if isinstance(num, (int, float)):
             data = self.data**num
-            return Tensor(data, _parents=[self])
-        elif isinstance(num, Tensor):
-            data = self.data**num.data
-            return Tensor(data, _parents=[self, num])
+            return Tensor(data, _parents=[self], _ops = "pow")
         else:
             raise TypeError(f"Power operation not supported for type {type(num)}")
 
@@ -95,5 +94,3 @@ class Tensor:
         else:
             data = self.data != other
             return Tensor(data, _parents=[self])
-
-
