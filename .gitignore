@@ -50,3 +50,6 @@ coverage.xml
 
 # Cython debug symbols
 cython_debug/
+
+# Main test file
+main.py
