@@ -1,6 +1,8 @@
 from .ops import Tensor
 import jax.numpy as jnp
-from .backward_utils import (_backward_4_add,_backward_4_mul,_backward_4_sub)
+from .backward_utils import (_backward_4_add,_backward_4_mul,_backward_4_sub,_backward_tanh,_backward_ReLU,_backward_ELU,
+                             _backward_HardShrink,_backward_Hardsigmoid,_backward_Hardtanh
+                             )
 
 
 def add_to_class(Class):  #@save
@@ -39,4 +41,31 @@ def _backward(self, grad=0.3):
         self._parents[0]._grad += -grad
     
     if self._ops == "Tanh":
-        print("yo")
+        y = jnp.array(self.data)
+        dX = _backward_tanh(y,grad)
+        self._parents[0]._grad += dX
+
+    if self._ops == "ReLU":
+        y =  jnp.array(self.data)
+        dX = _backward_ReLU(y,grad)
+        self._parents[0]._grad += dX
+
+    if self._ops == "ELU":
+        y = jnp.array(self._parents[0].data)
+        dX = _backward_ELU(y,grad,self.alpha)
+        self._parents[0]._grad += dX
+
+    if self._ops == "HardShrink":
+        y = jnp.array(self._parents[0].data)
+        dX = _backward_HardShrink(y,grad,self.lambd)
+        self._parents[0]._grad += dX
+
+    if self._ops == "Hardsigmoid":
+        y = jnp.array(self._parents[0].data)
+        dX = _backward_Hardsigmoid(y,grad)
+        self._parents[0]._grad += dX
+
+    if self._ops == "Hardtanh":
+        y = jnp.array(self._parents[0].data)
+        dX = _backward_Hardtanh(y,grad,self.min_val,self.max_val)
+        self._parents[0]._grad += dX

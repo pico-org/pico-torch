@@ -16,8 +16,8 @@ class Tanh(Tensor):
         else:
             raise TypeError("Expected a Tensor as input")
 
-    def _backward(self):
-        super()._backward()
+    def _backward(self,grad):
+        super()._backward(grad)
 
 
 class ReLU(Tensor):
@@ -25,11 +25,11 @@ class ReLU(Tensor):
         if isinstance(X,Tensor):
             array = jnp.array(X.data)
             data = jax_ReLU(array)
-            super().__init__(data, _parents=[X])
+            super().__init__(data, _parents=[X],_ops = "ReLU")
         else:
             raise TypeError("Expected a Tensor as input")
-    def _backward(self):
-        super()._backward()
+    def _backward(self,grad):
+        super()._backward(grad)
 
 class ELU(Tensor):
     def __init__(self,X,alpha = 1.0):
@@ -37,13 +37,14 @@ class ELU(Tensor):
         alpha (float): the value for the ELU formulation. Default: 1.0
         """
         if isinstance(X,Tensor):
+            self.alpha = alpha
             array = jnp.array(X.data)
             data = jax_ELU(array, alpha)
-            super().__init__(data, _parents=[X])
+            super().__init__(data, _parents=[X], _ops = "ELU")
         else:
             raise TypeError("Expected a Tensor as input")
-    def _backward(self):
-        super()._backward()
+    def _backward(self,grad):
+        super()._backward(grad)
 
 class HardShrink(Tensor):
     def __init__(self,X,lambd = 0.5):
@@ -52,25 +53,26 @@ class HardShrink(Tensor):
         """
         if isinstance(X,Tensor):
             array = jnp.array(X.data)
+            self.lambd = lambd
             data = jax_HardShrink(array,lambd)
-            super().__init__(data, _parents=[X])
+            super().__init__(data, _parents=[X],_ops = "HardShrink")
         else:
             raise TypeError("Expected a Tensor as input")
         
-    def _backward(self):
-        super()._backward()
+    def _backward(self,grad):
+        super()._backward(grad)
 
 class Hardsigmoid(Tensor):
     def __init__(self, X):
         if isinstance(X, Tensor):
             array = jnp.array(X.data)
             data = jax_Hardsigmoid(array)
-            super().__init__(data, _parents=[X])
+            super().__init__(data, _parents=[X],_ops = "Hardsigmoid")
         else:
             raise TypeError("Expected a Tensor as input")
         
-    def _backward(self):
-        super()._backward()
+    def _backward(self,grad):
+        super()._backward(grad)
 
     
 class Hardtanh(Tensor):
@@ -82,14 +84,16 @@ class Hardtanh(Tensor):
         
         """
         if isinstance(X, Tensor):
+            self.max_val = max_val
+            self.min_val = min_val
             array = jnp.array(X.data)
             data = jax_Hardtanh(array)
-            super().__init__(data, _parents=[X])
+            super().__init__(data, _parents=[X],_ops = "Hardtanh")
         else:
             raise TypeError("Expected a Tensor as input")
         
-    def _backward(self):
-        super()._backward()
+    def _backward(self,grad):
+        super()._backward(grad)
 
 class Hardswish(Tensor):    
     def __init__(self,X):
