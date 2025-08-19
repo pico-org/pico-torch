@@ -53,3 +53,10 @@ cython_debug/
 
 # Main test file
 main.py
+
+# Benchmark and analysis files
+benchmark.py
+simple_benchmark.py
+optimized_benchmark.py
+optimization_suggestions.md
+performance_roadmap.md

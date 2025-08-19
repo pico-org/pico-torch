@@ -18,7 +18,7 @@ class Tensor:
     def __add__(self, other):
         if isinstance(other, (int, float)):
             data = self.data + other
-            return Tensor(data, _parents=[self])
+            return Tensor(data, _parents=[self], _ops="add_scalar")
         else:
             data = self.data + other.data
             return Tensor(data, _parents=[self, other],_ops = "+")
@@ -45,7 +45,9 @@ class Tensor:
     def __mul__(self, other):
         if isinstance(other, (int, float)):
             data = self.data * other
-            return Tensor(data, _parents=[self],_ops = "*")
+            result = Tensor(data, _parents=[self], _ops="mul_scalar")
+            result._scalar = other
+            return result
         else:
             data = self.data * other.data
             return Tensor(data, _parents=[self, other],_ops = "*")
@@ -56,7 +58,9 @@ class Tensor:
     def __truediv__(self, other):
         if isinstance(other, (int, float)):
             data = self.data / other
-            return Tensor(data, _parents=[self],_ops = "/")
+            result = Tensor(data, _parents=[self],_ops = "/")
+            result._scalar = other
+            return result
         else:
             data = self.data / other.data
             return Tensor(data, _parents=[self, other],_ops = "/")
@@ -64,7 +68,9 @@ class Tensor:
     def __rtruediv__(self, other):
         if isinstance(other, (int, float)):
             data = other / self.data
-            return Tensor(data, _parents=[self],_ops = "/")
+            result = Tensor(data, _parents=[self],_ops = "rdiv_scalar")
+            result._scalar = other
+            return result
         else:
             return other / self
 
@@ -75,7 +81,9 @@ class Tensor:
     def __pow__(self, num):
         if isinstance(num, (int, float)):
             data = self.data**num
-            return Tensor(data, _parents=[self], _ops = "pow")
+            result = Tensor(data, _parents=[self], _ops = "pow")
+            result._power = num
+            return result
         else:
             raise TypeError(f"Power operation not supported for type {type(num)}")
 

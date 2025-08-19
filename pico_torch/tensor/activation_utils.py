@@ -72,3 +72,28 @@ def jax_Softmax(X):
 @jit 
 def jax_LogSoftmax(X):
     return jnp.log(jnp.exp(X)/(1e-5+jnp.sum(jnp.exp(X))))
+
+def _initialize_activation_functions():
+    import jax.numpy as jnp
+    dummy_x = jnp.array([1.0])
+    dummy_alpha = 1.0
+    dummy_lambd = 0.5
+    dummy_min_val = -1.0
+    dummy_max_val = 1.0
+    dummy_neg_slope = 0.1
+    jax_tanh(dummy_x)
+    jax_ReLU(dummy_x)
+    jax_ELU(dummy_x, dummy_alpha)
+    jax_HardShrink(dummy_x, dummy_lambd)
+    jax_Hardsigmoid(dummy_x)
+    jax_Hardtanh(dummy_x, dummy_min_val, dummy_max_val)
+    jax_Hardswish(dummy_x)
+    jax_LeakyReLU(dummy_x, dummy_neg_slope)
+    jax_LogSigmoid(dummy_x)
+    jax_ReLU6(dummy_x)
+    jax_Sigmoid(dummy_x)
+    jax_Softshrink(dummy_x, dummy_lambd)
+    jax_Softsign(dummy_x)
+    jax_Tanhshrink(dummy_x)
+    jax_Softmax(dummy_x)
+    jax_LogSoftmax(dummy_x)

@@ -100,12 +100,12 @@ class Hardswish(Tensor):
         if isinstance(X,Tensor):
             array = jnp.array(X.data)
             data = jax_Hardswish(array)
-            super().__init__(data,_parents = [X])
+            super().__init__(data,_parents = [X],_ops = "Hardswish")
         else:
             raise TypeError("Expected a Tensor as input")
         
-    def _backward(self):
-        super()._backward()
+    def _backward(self,grad):
+        super()._backward(grad)
 
 class LeakyReLU(Tensor):
     def __init__(self,X,negative_slope = 1e-2):
@@ -115,80 +115,83 @@ class LeakyReLU(Tensor):
         """
         if isinstance(X,Tensor):
             array = jnp.array(X.data)
+            self.neg_slope = negative_slope
             data = jax_LeakyReLU(array)
-            super().__init__(data, _parents=[X])
+            super().__init__(data, _parents=[X],_ops = "LeakyReLU")
         else:
             raise TypeError("Expected a Tensor as input")    
         
-    def _backward(self):
-        super()._backward()
+    def _backward(self,grad):
+        super()._backward(grad)
 
 class LogSigmoid(Tensor):
     def __init__(self,X):
         if isinstance(X,Tensor):
             array = jnp.array(X.data)
             data = jax_LogSigmoid(array)
-            super().__init__(data, _parents=[X])
+            super().__init__(data, _parents=[X],_ops = "LogSigmoid")
         else:
             raise TypeError("Expected a Tensor as input") 
-    def _backward(self):
-        super()._backward()
+    def _backward(self,grad):
+        super()._backward(grad)
 
 class ReLU6(Tensor):
     def __init__(self,X):
         if isinstance(X,Tensor):
             array = jnp.array(X.data)
             data = jax_ReLU6(array)
-            super().__init__(data, _parents=[X])
+            super().__init__(data, _parents=[X],_ops = "ReLU6")
         else:
             raise TypeError("Expected a Tensor as input") 
-    def _backward(self):
-        super()._backward()
+    def _backward(self,grad):
+        super()._backward(grad)
+
 
 class Sigmoid(Tensor):
     def __init__(self,X):
         if isinstance(X,Tensor):
             array = jnp.array(X.data)
             data = jax_Sigmoid(array)
-            super().__init__(data, _parents=[X])
+            super().__init__(data, _parents=[X],_ops = "Sigmoid")
         else:
             raise TypeError("Expected a Tensor as input") 
-    def _backward(self):
-        super()._backward()
+    def _backward(self,grad):
+        super()._backward(grad)
 
 
 class Softshrink(Tensor):
-    def __init__(self,X,lmabd = 0.5):
+    def __init__(self,X,lambd = 0.5):
         if isinstance(X,Tensor):
             array = jnp.array(X.data)
-            data = jax_Softshrink(array)
-            super().__init__(data, _parents=[X])
+            self.lambd = lambd
+            data = jax_Softshrink(array,lambd)
+            super().__init__(data, _parents=[X],_ops = "Softshrink")
         else:
             raise TypeError("Expected a Tensor as input") 
-    def _backward(self):
-        super()._backward()
+    def _backward(self,grad):
+        super()._backward(grad)
 
 class Softsign(Tensor):
     def __init__(self,X):
         if isinstance(X,Tensor):
             array = jnp.array(X.data)
             data = jax_Softsign(array)
-            super().__init__(data, _parents=[X])
+            super().__init__(data, _parents=[X],_ops = "Softsign")
         else:
             raise TypeError("Expected a Tensor as input") 
-    def _backward(self):
-        super()._backward()
+    def _backward(self,grad):
+        super()._backward(grad)
 
 class Tanhshrink(Tensor):
     def __init__(self,X):
         if isinstance(X,Tensor):
             array = jnp.array(X.data)
             data = jax_Tanhshrink(array)
-            super().__init__(data, _parents=[X])
+            super().__init__(data, _parents=[X],_ops = "Tanhshrink")
         else:
             raise TypeError("Expected a Tensor as input") 
-    def _backward(self):
-        super()._backward()
+    def _backward(self,grad):
+        super()._backward(grad)
 
 
 class Softmax(Tensor):
@@ -196,11 +199,11 @@ class Softmax(Tensor):
         if isinstance(X,Tensor):
             array = jnp.array(X.data)
             data = jax_Softmax(array)
-            super().__init__(data, _parents=[X])
+            super().__init__(data, _parents=[X],_ops = "Softmax")
         else:
             raise TypeError("Expected a Tensor as input") 
-    def _backward(self):
-        super()._backward()
+    def _backward(self,grad):
+        super()._backward(grad)
 
 
 class LogSoftmax(Tensor):
