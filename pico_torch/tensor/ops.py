@@ -102,3 +102,41 @@ class Tensor:
         else:
             data = self.data != other
             return Tensor(data, _parents=[self])
+        
+    def shape(self):
+        return self.data.shape
+
+    def reshape(self,size):
+        data = self.data.reshape(size)
+        return Tensor(data)
+    
+    def unsqueeze(self, dim):
+        data = jnp.expand_dims(self.data, axis=dim)
+        return Tensor(data, requires_grad=self.requires_grad, _parents=[self], _ops="unsqueeze")
+    
+    def squeeze(self, dim=None):
+        data = jnp.squeeze(self.data,axis=dim)
+        return Tensor(data, requires_grad=self.requires_grad, _parents=[self], _ops="squeeze")
+    
+    def permute(self,perm):
+        data = jnp.permute_dims(self.data,axes=perm)
+
+    def flatten(self):
+        _shape = self.data.shape
+        total_element = 1
+        for i in _shape:
+            total_element*=i
+        data = jnp.resize(self.data,total_element)
+        return Tensor(data)
+    
+    def sum(self,dim):
+        data = jnp.sum(self.data,dim)
+        return Tensor(data)
+        
+    def argmax(self, dim=None):
+        return jnp.argmax(self.data, axis=dim)
+    
+    def argmin(self, dim=None):
+        return jnp.argmin(self.data,axis=dim)
+    
+    
