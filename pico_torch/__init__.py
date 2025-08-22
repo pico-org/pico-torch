@@ -4,7 +4,6 @@ from .tensor.activation import (Tanh, ReLU, ELU, HardShrink, Hardsigmoid, Hardta
                                Softsign, Tanhshrink, Softmax, LogSoftmax)
 
 from .tensor._backward import (_backward)
-
 def initialize():
     from .tensor.activation_utils import _initialize_activation_functions
     from .tensor.backward_utils import _initialize_backward_functions
@@ -14,5 +13,5 @@ def initialize():
 
 __all__ = ["Tensor", "Tanh", "ReLU", "ELU", "HardShrink", "Hardsigmoid", "Hardtanh",
            "Hardswish", "LeakyReLU", "LogSigmoid", "ReLU6", "Sigmoid", "Softshrink",
-           "Softsign", "Tanhshrink", "Softmax", "LogSoftmax","_backward", "initialize"]
+           "Softsign", "Tanhshrink", "Softmax", "LogSoftmax","_backward", "initialize","L1loss"]
 
