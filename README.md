@@ -1,5 +1,5 @@
 # pico-torch
-![logo](assets/logo.png)
+![logo](assets/ChatGPT Image Aug 22, 2025, 11_41_51 PM.png)
 
 
 
