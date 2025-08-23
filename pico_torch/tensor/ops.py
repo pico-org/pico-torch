@@ -11,6 +11,7 @@ class Tensor:
         self._grad = jnp.zeros(self.data.shape) if self.requires_grad is not None else None
         self._grad_fn = None
         self._parents = [] if _parents is None else _parents
+        self.size = None
 
     def __repr__(self):
         return f"Tensor(data={self.data}, requires_grad={self.requires_grad})"
@@ -139,4 +140,11 @@ class Tensor:
     def argmin(self, dim=None):
         return jnp.argmin(self.data,axis=dim)
     
-    
+
+class empty(Tensor):
+    def __init__(self,*shape):
+        super().__init__(jnp.empty(shape))
+        _size = 1
+        for i in list(shape):
+            _size*=i
+        self.size = _size
