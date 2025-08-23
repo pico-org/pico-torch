@@ -121,6 +121,7 @@ class Tensor:
     
     def permute(self,perm):
         data = jnp.permute_dims(self.data,axes=perm)
+        return Tensor(data)
 
     def flatten(self):
         _shape = self.data.shape
