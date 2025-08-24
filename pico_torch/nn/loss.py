@@ -21,7 +21,7 @@ class L1loss:
             return RuntimeError("wrong shape provided")
         else:
             self.num_element = self.p.size
-            return jax_l1loss(self.p,self.gt,self.num_element)
+            return Tensor(jax_l1loss(self.p,self.gt,self.num_element),_parents = [prediction,ground_truth])
     
 class MSELoss:
     def __init__(self):
@@ -41,8 +41,8 @@ class MSELoss:
             return RuntimeError("wrong shape provided")
         else:
             self.num_element = self.p.size
-            return jax_mse(self.p,self.gt,self.num_element)
-        
+            return Tensor(jax_mse(self.p,self.gt,self.num_element),_parents = [prediction,ground_truth])
+                
 class CrossEntropyLoss:
     def __init__(self, from_logits=True):
         """
@@ -68,7 +68,7 @@ class CrossEntropyLoss:
         if self.gt.ndim == 1 and self.gt.dtype in [jnp.int32, jnp.int64]:
             return jax_cel_indices(self.p, self.gt.astype(jnp.int32), self.num_element)
         else:
-            return jax_cel(self.p, self.gt, self.num_element)
+            return Tensor(jax_cel(self.p, self.gt, self.num_element),_parents = [prediction,ground_truth])
         
 
 class HuberLoss:
@@ -90,7 +90,7 @@ class HuberLoss:
         if self.p.shape != self.gt.shape:
             return RuntimeError("wrong shape provided")
         else:
-            return jax_hl(self.p,self.gt,self.delta)
+            return Tensor(jax_hl(self.p,self.gt,self.delta),_parents = [prediction,ground_truth])
         
 
 class SmoothL1Loss:
@@ -112,7 +112,7 @@ class SmoothL1Loss:
         if self.p.shape != self.gt.shape:
             return RuntimeError("wrong shape provided")
         else:
-            return jax_SL1l(self.p,self.gt,self.beta)
+            return Tensor(jax_SL1l(self.p,self.gt,self.beta),_parents = [prediction,ground_truth])
         
 
 class SoftMarginLoss:
@@ -134,4 +134,4 @@ class SoftMarginLoss:
         if self.p.shape != self.gt.shape:
             return RuntimeError("wrong shape provided")
         else:
-            return jax_SML(self.p,self.gt)
+            return Tensor(jax_SML(self.p,self.gt),_parents = [prediction,ground_truth])
