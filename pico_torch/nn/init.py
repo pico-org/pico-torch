@@ -66,3 +66,23 @@ def normal_(t, mean=0.0, std=1.0):
     shape = t.shape()
     normal_data = _box_muller_scratch(shape)
     t.data = normal_data * std + mean
+
+
+def constant_(t,value):
+    t.data+=value
+
+
+def ones_(t):
+    t.data+=1
+
+def zeros_(t):
+    pass
+
+def eye_(t):
+    rows, cols = t.shape()
+    r = jnp.arange(rows)[:, None] 
+    c = jnp.arange(cols)[None, :]  
+    t.data = (r == c).astype(t.data.dtype)
+
+
+    
