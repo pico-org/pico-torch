@@ -84,5 +84,4 @@ def eye_(t):
     c = jnp.arange(cols)[None, :]  
     t.data = (r == c).astype(t.data.dtype)
 
-
     

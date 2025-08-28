@@ -156,12 +156,14 @@ class Tensor:
 
 
 class empty(Tensor):
-    def __init__(self,*shape):
-        super().__init__(jnp.empty(shape))
+    def __new__(cls,shape:tuple):
         _size = 1
+        a = Tensor(jnp.empty(shape))
         for i in list(shape):
             _size*=i
-        self.size = _size
+        size = _size
+        return a        
+        
 
 class Random(Tensor):
     def __new__(cls, shape: tuple):
@@ -170,3 +172,6 @@ class Random(Tensor):
             for j in range(shape[1]):
                 _data[i][j] = random.random()
         return Tensor(_data)
+
+
+

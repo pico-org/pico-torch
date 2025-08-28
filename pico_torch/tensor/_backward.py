@@ -146,13 +146,25 @@ def _backward(self, grad=0.3):
         B = jnp.array(self._parents[1].data)
         
         grad_array = jnp.array(grad)
+        
+        # Ensure grad_array has correct dimensions for matrix multiplication
         if grad_array.ndim == 0:
             grad_array = jnp.array([[grad_array]])
         elif grad_array.ndim == 1:
-            grad_array = grad_array.reshape(1, -1)
+            grad_array = grad_array.reshape(-1, 1) if len(grad_array) == A.shape[0] else grad_array.reshape(1, -1)
+        
+        # Compute gradients with proper shape handling
+        try:
+            dA = grad_array @ B.T
+            dB = A.T @ grad_array
+        except Exception:
+            # Fallback: reshape grad_array to match expected output shape
+            expected_shape = (A.shape[0], B.shape[1])
+            if grad_array.shape != expected_shape:
+                grad_array = grad_array.reshape(expected_shape)
+            dA = grad_array @ B.T
+            dB = A.T @ grad_array
             
-        dA = grad_array @ B.T
-        dB = A.T @ grad_array
         safe_add_grad(self._parents[0], dA)
         safe_add_grad(self._parents[1], dB)
 
