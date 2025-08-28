@@ -1,6 +1,6 @@
-import jax # type: ignore 
-from jax import jit # type: ignore
-import jax.numpy as jnp # type: ignore
+import jax  
+from jax import jit 
+import jax.numpy as jnp 
 
 @jit
 def jax_tanh(X):
@@ -28,12 +28,12 @@ def jax_Hardsigmoid(X):
 
 @jit 
 def jax_Hardtanh(X,min_val=-1.0, max_val=1.0):
-    return jnp.where(X > max_val, max_val,jnp.where(X<min_val, min_val, X))
+    return jnp.where(X > max_val, max_val,jnp.where(X<min_val, min_val, X))  # type: ignore
 
 
 @jit 
 def jax_Hardswish(X):
-    return jnp.where(X >= 3, X, jnp.where(X <= -3, 0, (X*((X+3)/6))))
+    return jnp.where(X >= 3, X, jnp.where(X <= -3, 0, (X*((X+3)/6)))) # type: ignore
 
 @jit 
 def jax_LeakyReLU(X,negative_slope = 1e-2):
@@ -54,7 +54,7 @@ def jax_Sigmoid(X):
 
 @jit
 def jax_Softshrink(X,lambd = 0.5):
-    return jnp.where(X > lambd,X - lambd, jnp.where(X < -lambd, X + lambd, 0))
+    return jnp.where(X > lambd,X - lambd, jnp.where(X < -lambd, X + lambd, 0)) # type: ignore
 
 @jit
 def jax_Softsign(X):

@@ -66,7 +66,7 @@ class CrossEntropyLoss:
         self.num_element = self.gt.shape[0] if self.gt.ndim > 0 else 1
 
         if self.gt.ndim == 1 and self.gt.dtype in [jnp.int32, jnp.int64]:
-            return jax_cel_indices(self.p, self.gt.astype(jnp.int32), self.num_element)
+            return Tensor(jax_cel_indices(self.p, self.gt.astype(jnp.int32), self.num_element),_parents = [prediction,ground_truth])
         else:
             return Tensor(jax_cel(self.p, self.gt, self.num_element),_parents = [prediction,ground_truth])
         

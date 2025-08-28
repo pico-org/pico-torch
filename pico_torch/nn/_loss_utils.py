@@ -48,6 +48,8 @@ def jax_cel_indices(x, y, ele):
 def jax_hl(x, y, delta):
     diff = jnp.abs(x - y)
     loss = jnp.where(diff <= delta, 0.5 * diff**2, delta * diff - 0.5 * delta**2)
+    if isinstance(loss, tuple):
+        loss = loss[0]
     return jnp.mean(loss)
 
 

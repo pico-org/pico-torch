@@ -12,7 +12,7 @@ class Tanh(Tensor):
         if isinstance(X, Tensor):
             array = jnp.array(X.data)
             data = jnp.tanh(array)
-            super().__init__(data, _parents=[X],_ops = "Tanh")
+            super().__init__(data, _parents=[X], _ops="Tanh", requires_grad=X.requires_grad)
         else:
             raise TypeError("Expected a Tensor as input")
 
@@ -87,7 +87,7 @@ class Hardtanh(Tensor):
             self.max_val = max_val
             self.min_val = min_val
             array = jnp.array(X.data)
-            data = jax_Hardtanh(array)
+            data = jax_Hardtanh(array, min_val, max_val)
             super().__init__(data, _parents=[X],_ops = "Hardtanh")
         else:
             raise TypeError("Expected a Tensor as input")
@@ -116,7 +116,7 @@ class LeakyReLU(Tensor):
         if isinstance(X,Tensor):
             array = jnp.array(X.data)
             self.neg_slope = negative_slope
-            data = jax_LeakyReLU(array)
+            data = jax_LeakyReLU(array, negative_slope)
             super().__init__(data, _parents=[X],_ops = "LeakyReLU")
         else:
             raise TypeError("Expected a Tensor as input")    
@@ -211,8 +211,8 @@ class LogSoftmax(Tensor):
         if isinstance(X,Tensor):
             array = jnp.array(X.data)
             data = jax_LogSoftmax(array)
-            super().__init__(data, _parents=[X])
+            super().__init__(data, _parents=[X], _ops="LogSoftmax")
         else:
             raise TypeError("Expected a Tensor as input") 
-    def _backward(self):
-        super()._backward()
+    def _backward(self, grad):
+        super()._backward(grad)
