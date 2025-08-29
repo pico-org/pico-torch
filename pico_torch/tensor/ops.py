@@ -158,7 +158,7 @@ class Tensor:
 class empty(Tensor):
     def __new__(cls,shape:tuple):
         _size = 1
-        a = Tensor(jnp.empty(shape))
+        a = Tensor(jnp.empty(shape),requires_grad=True)
         for i in list(shape):
             _size*=i
         size = _size
